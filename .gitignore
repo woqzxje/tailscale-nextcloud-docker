@@ -1,0 +1,16 @@
+## 📂 .gitignore
+
+Make sure to ignore local data and system files:
+
+# Docker volumes
+caddy_data/
+caddy_config/
+
+# OS metadata
+.DS_Store
+
+# Nextcloud persistent volumes (if mounted outside)
+nextcloud_data/
+db_data/
+
+.env
