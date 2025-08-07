@@ -21,12 +21,22 @@ I wanted a personal cloud service—like Google Drive but hosted by me—so I co
 - **Colima** to run Docker on macOS with Linux networking  
 
 ---
-
+## Architecture 
 ![architecture](/screenshots/Architecture.png)
+
+## Tailscale dashboard
 ![tailscale](/screenshots/taiscale.png)
+
+## Account creation page
 ![account](/screenshots/nextcloud%20account%20creation.png)
+
+## Apps recommended to install
 ![recommendation](/screenshots/apps%20recommend.png)
+
+## Nextcloud dashboard
 ![dashboard](/screenshots/dashboard.png)
+
+## Nextcloud file manager
 ![filemanager](/screenshots/file%20manager.png)
 ---
 
