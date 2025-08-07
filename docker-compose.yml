@@ -1,0 +1,44 @@
+
+services:
+  db:
+    image: mariadb:lts
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_root_password
+      - MYSQL_PASSWORD=your_password
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud_user
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+
+  app:
+    image: nextcloud
+    # Optionally comment out ports if you only access Nextcloud via Caddy reverse proxy:
+    ports:
+      - "12000:80"
+    environment:
+      - MYSQL_PASSWORD=your_password
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud_user
+      - MYSQL_HOST=db
+      - NEXTCLOUD_TRUSTED_DOMAINS=localhost 100.105.160.16 rohans-macbook-air.wolf-humboldt.ts.net
+    volumes:
+      - nextcloud_data:/var/www/html
+
+  caddy:
+    image: caddy:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  nextcloud_data:
+
