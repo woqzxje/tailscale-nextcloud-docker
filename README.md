@@ -22,23 +22,8 @@ I wanted a personal cloud service—like Google Drive but hosted by me—so I co
 
 ---
 
-## 🧱 Folder Structure
-
-nextcloud-docker-setup/
-├── docker-compose.yml
-├── Caddyfile
-├── caddy_config/ # Caddy runtime config (auto-generated)
-├── caddy_data/ # Caddy certs & TLS data (auto-generated)
-├── screenshots/ # Screenshots folder
-│ ├── architecture-diagram.png
-│ ├── nextcloud-ui.png
-│ └── tailscale-dashboard.png
-├── README.md
-└── .gitignore
-
----
-
 ![architecture](/screenshots/Architecture.png)
+![tailscale](/screenshots/taiscale.png)
 ![account](/screenshots/nextcloud%20account%20creation.png)
 ![recommendation](/screenshots/apps%20recommend.png)
 ![dashboard](/screenshots/dashboard.png)
