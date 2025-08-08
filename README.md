@@ -224,7 +224,9 @@ Prometheus showed empty dashboards because it wasn’t scraping correctly.
 
 ```shell
 
-git clone https://github.com/100dollarguy/tailscale-nextcloud-docker.git cd tailscale-nextcloud-docker
+git clone https://github.com/100dollarguy/tailscale-nextcloud-docker.git
+
+ cd tailscale-nextcloud-docker
 
 ```
 2. Start Colima (Docker for macOS):
