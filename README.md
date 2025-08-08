@@ -1,95 +1,259 @@
-# Self-Hosted Nextcloud with Docker, Caddy, and Tailscale
+# 🗂️ Self-Hosted Nextcloud with Docker, Caddy, Prometheus, Grafana & Tailscale
 
-This project lets me run my own private Nextcloud server on my Mac using Docker Compose, with secure remote access through Tailscale’s MagicDNS and HTTPS provided by Caddy as a reverse proxy. It’s private, secure, and accessible only within my Tailscale network.
+This project lets me run a fully self-hosted, private cloud storage and monitoring stack on macOS using **Docker Compose**, with secure remote access through **Tailscale’s MagicDNS**, **HTTPS** via **Caddy**, and real-time monitoring using **Prometheus + Grafana**. It’s secure, private, and entirely within my control.
 
 ---
 
 ## 🔧 Why I Built This
 
-I wanted a personal cloud service—like Google Drive but hosted by me—so I could keep my files private without relying on third-party servers. It was also a way to learn Docker networking, VPNs with Tailscale, and secure web access with Caddy.
+I wanted a **private Google Drive alternative** where I controlled my files completely. I also wanted to learn:
+
+- Docker containerization
+    
+- VPN-based secure access using Tailscale
+    
+- Configuring HTTPS with reverse proxies (Caddy)
+    
+- Observability using Grafana and Prometheus
+    
 
 ---
 
 ## ⚙️ Technologies Used
 
-- **Nextcloud** for cloud storage and syncing  
-- **Docker Compose** to manage containers  
-- **MariaDB** as the Nextcloud database  
-- **Redis** to improve performance  
-- **Caddy** for automatic HTTPS and reverse proxy  
-- **Tailscale** for a private VPN and MagicDNS  
-- **Colima** to run Docker on macOS with Linux networking  
+- **Nextcloud** – cloud file syncing and collaboration
+    
+- **MariaDB** – database backend
+    
+- **Redis** – caching for Nextcloud performance
+    
+- **Caddy** – reverse proxy with automatic HTTPS
+    
+- **Prometheus** – metrics collection
+    
+- **Grafana** – visual dashboards for system health
+    
+- **Tailscale** – private VPN with MagicDNS
+    
+- **Colima** – Docker on macOS with Linux networking
+    
 
 ---
-## Architecture 
+
+## 🧱 Architecture
+
 ![architecture](/screenshots/Architecture.png)
 
-## Tailscale dashboard
-![tailscale](/screenshots/taiscale.png)
-
-## Account creation page
-![account](/screenshots/nextcloud%20account%20creation.png)
-
-## Apps recommended to install
-![recommendation](/screenshots/apps%20recommend.png)
-
-## Nextcloud dashboard
-![dashboard](/screenshots/dashboard.png)
-
-## Nextcloud file manager
-![filemanager](/screenshots/file%20manager.png)
 ---
 
-## 🚧 Challenges
+## 🔐 Tailscale Access
 
-- Needed Colima because Docker can’t easily access the macOS network  
-- Caddy reverse proxy required correct port and hostname setup  
-- MagicDNS short names didn’t resolve until fixing macOS DNS  
-- Learned that SSL setup is still useful even when using Tailscale VPN  
+![tailscale](/screenshots/taiscale.png)
+
+---
+
+## 🧑‍💻 Account Creation Page
+
+![account](/screenshots/nextcloud%20account%20creation.png)
+
+---
+
+## ⭐ Recommended Nextcloud Apps
+
+![recommendation](/screenshots/apps%20recommend.png)
+
+---
+
+## 📁 Nextcloud Dashboard
+
+![dashboard](/screenshots/dashboard.png)
+
+---
+
+## 📂 File Manager
+
+![filemanager](/screenshots/file%20manager.png)
+
+---
+
+## 📊 Grafana login
+
+_Configure Grafana to monitor your container metrics and Nextcloud performance._
+
+![Grafana login](/screenshots/Grafana%20login.png)
+
+## Grafana Dashboard
+
+![Grafana](/screenshots/Grafana%20Dashboard.png)
+
+---
+
+## 🧪 Prometheus Metrics
+
+_Set up Prometheus to scrape Docker and system metrics for monitoring._
+
+
+![prometheus](/screenshots/Prometheus.png)
+
+![prometheus](/screenshots/Prometheus%20metrics.png)
+
+---
+
+## 🧯 Troubleshooting: Blank Login Page on Nextcloud
+
+When I first set up Nextcloud, the login page was **completely blank**. Here's what fixed it:
+
+### ✅ Root Causes
+
+- Database not running or misconfigured
+    
+- Incorrect `config.php` settings
+    
+- File permission issues
+    
+- Services not restarted after changes
+    
+- Cached browser errors
+    
+
+### 🛠️ Fixes
+
+1. **Checked MariaDB service**
+    
+2. **Verified `config/config.php` database fields**
+    
+3. **Ensured correct file permissions for web user**
+    
+4. **Restarted containers**
+    
+5. **Cleared browser cache and cookies**
+    
+
+After doing all of the above, the login page loaded correctly.
+
+---
+
+## 🧯 Troubleshooting: Grafana Blank Page or Not Loading
+
+When Grafana didn’t load its login/dashboard:
+
+### ✅ Common Problems
+
+- Grafana not connected to its DB (SQLite or external)
+    
+- Misconfigured `grafana.ini` (root URL or port)
+    
+- Reverse proxy or firewall blocking access
+    
+
+### 🛠️ Fixes
+
+1. Checked `docker logs` and confirmed Grafana is running
+    
+2. Verified `grafana.ini` config (port, URLs)
+    
+3. Cleared browser cache
+    
+4. Restarted Grafana container
+    
+
+---
+
+## 🧯 Troubleshooting: Prometheus Not Scraping or Showing Metrics
+
+Prometheus showed empty dashboards because it wasn’t scraping correctly.
+
+### ✅ Common Problems
+
+- Misconfigured `prometheus.yml`
+    
+- Scrape targets unreachable
+    
+- Network or firewall blocking port 9090
+    
+
+### 🛠️ Fixes
+
+1. Checked Prometheus container logs
+    
+2. Validated scrape target URLs in `prometheus.yml`
+    
+3. Restarted Prometheus after edits
+    
+4. Cleared cache in browser
+    
 
 ---
 
 ## 📚 What I Learned
 
-- Managing Docker containers with shared volumes and networks  
-- Using Colima for Linux-style Docker on macOS  
-- Securing local services with Caddy reverse proxy and HTTPS  
-- How Tailscale MagicDNS simplifies device-to-device access  
-- Troubleshooting DNS and networking on different platforms  
+- Docker Compose for multi-service orchestration
+    
+- Linux-based networking with Colima
+    
+- Reverse proxies and automatic TLS with Caddy
+    
+- VPN routing and access control using Tailscale
+    
+- Real-time monitoring using Prometheus and Grafana
+    
+- Debugging blank pages, database issues, config problems
+    
 
 ---
 
 ## ✅ Future Plans
 
-- Add backups for Nextcloud data  
-- Configure email for password recovery  
-- Install useful Nextcloud plugins  
-- Enable two-factor authentication for admins  
+- Automated **Nextcloud backups**
+    
+- Email configuration for password resets
+    
+- Add **Grafana alerts** for system health
+    
+- Enable **2FA** in Nextcloud for better security
+    
+- Explore **external storage backends** for Nextcloud
+    
 
 ---
 
 ## 🏁 How to Run
 
 1. Clone the repo:
+    
 
 ```shell
-    git clone https://github.com/100dollarguy/tailscale-nextcloud-docker.git
-    cd tailscale-nextcloud-docker
-```    
 
-2. Start Colima and the Docker stack:
+git clone https://github.com/100dollarguy/tailscale-nextcloud-docker.git cd tailscale-nextcloud-docker
 
-```shell
-    colima start
-    docker compose up -d
 ```
+2. Start Colima (Docker for macOS):
+    
+```shell
 
-3. Access Nextcloud in your browser via Tailscale domain:
+colima start
+
+```
+3. Start all containers:
+    
 
 ```shell
-    http://rohans-macbook-air.wolf-humboldt.ts.net   (Your Tailscale IP or Magic DNS)
-```
 
+docker compose up -d
+
+```
+4. Access services:
+    
+```shell
+- 📂 Nextcloud:  
+    http://your-magicdns-name.ts.net
+    
+- 📊 Grafana:  
+    http://your-magicdns-name.ts.net:3000
+    
+- 🔍 Prometheus:  
+    http://your-magicdns-name.ts.net:9090
+```
 ---
 
 ## 🔒 Important
