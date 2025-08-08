@@ -1,0 +1,172 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Active Users (5m)",
+      "targets": [
+        { "expr": "nextcloud_active_users_total", "refId": "A" }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Active Users (1h)",
+      "targets": [
+        { "expr": "nextcloud_active_users_hourly_total", "refId": "B" }
+      ],
+      "gridPos": { "x": 3, "y": 0, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Active Users (24h)",
+      "targets": [
+        { "expr": "nextcloud_active_users_daily_total", "refId": "C" }
+      ],
+      "gridPos": { "x": 6, "y": 0, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Total Users",
+      "targets": [
+        { "expr": "nextcloud_users_total", "refId": "D" }
+      ],
+      "gridPos": { "x": 9, "y": 0, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Installed Apps",
+      "targets": [
+        { "expr": "nextcloud_apps_installed_total", "refId": "E" }
+      ],
+      "gridPos": { "x": 0, "y": 2, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Apps Updates Available",
+      "targets": [
+        { "expr": "nextcloud_apps_updates_available_total", "refId": "F" }
+      ],
+      "gridPos": { "x": 3, "y": 2, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Files Count",
+      "targets": [
+        { "expr": "nextcloud_files_total", "refId": "G" }
+      ],
+      "gridPos": { "x": 6, "y": 2, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Total Shares",
+      "targets": [
+        { "expr": "nextcloud_shares_total", "refId": "H" }
+      ],
+      "gridPos": { "x": 9, "y": 2, "w": 3, "h": 2 }
+    },
+    {
+      "type": "graph",
+      "title": "Active Users Over Time (5m)",
+      "targets": [
+        { "expr": "nextcloud_active_users_total", "refId": "I" }
+      ],
+      "gridPos": { "x": 0, "y": 4, "w": 6, "h": 4 }
+    },
+    {
+      "type": "graph",
+      "title": "Files Count Over Time",
+      "targets": [
+        { "expr": "nextcloud_files_total", "refId": "J" }
+      ],
+      "gridPos": { "x": 6, "y": 4, "w": 6, "h": 4 }
+    },
+    {
+      "type": "graph",
+      "title": "Database Size (Bytes)",
+      "targets": [
+        { "expr": "nextcloud_database_size_bytes", "refId": "K" }
+      ],
+      "gridPos": { "x": 0, "y": 8, "w": 6, "h": 4 }
+    },
+    {
+      "type": "graph",
+      "title": "Free Space (Bytes)",
+      "targets": [
+        { "expr": "nextcloud_free_space_bytes", "refId": "L" }
+      ],
+      "gridPos": { "x": 6, "y": 8, "w": 6, "h": 4 }
+    },
+    {
+      "type": "stat",
+      "title": "PHP Memory Limit",
+      "targets": [
+        { "expr": "nextcloud_php_memory_limit_bytes", "refId": "M" }
+      ],
+      "gridPos": { "x": 0, "y": 12, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "PHP Upload Max Size",
+      "targets": [
+        { "expr": "nextcloud_php_upload_max_size_bytes", "refId": "N" }
+      ],
+      "gridPos": { "x": 3, "y": 12, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Exporter Up",
+      "targets": [
+        { "expr": "nextcloud_up", "refId": "O" }
+      ],
+      "gridPos": { "x": 6, "y": 12, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Scrape Errors",
+      "targets": [
+        { "expr": "nextcloud_scrape_errors_total", "refId": "P" }
+      ],
+      "gridPos": { "x": 9, "y": 12, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Federated Shares Sent",
+      "targets": [
+        {
+          "expr": "nextcloud_shares_federated_total{direction=\"sent\"}",
+          "refId": "Q"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 14, "w": 3, "h": 2 }
+    },
+    {
+      "type": "stat",
+      "title": "Federated Shares Received",
+      "targets": [
+        {
+          "expr": "nextcloud_shares_federated_total{direction=\"received\"}",
+          "refId": "R"
+        }
+      ],
+      "gridPos": { "x": 3, "y": 14, "w": 3, "h": 2 }
+    }
+  ],
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["nextcloud", "prometheus", "monitoring", "advanced"],
+  "templating": { "list": [] },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "title": "Nextcloud Advanced Monitoring",
+  "version": 1
+}
+

@@ -1,4 +1,4 @@
-Your-domain {
+http://rohans-macbook-air {
     reverse_proxy host.docker.internal:12000
 
     header {

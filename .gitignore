@@ -1,16 +1,33 @@
-## 📂 .gitignore
-
-Make sure to ignore local data and system files:
-
-# Docker volumes
+# Docker volumes and runtime data
 caddy_data/
 caddy_config/
 
-# OS metadata
-.DS_Store
-
-# Nextcloud persistent volumes (if mounted outside)
+# Nextcloud persistent volumes (if stored outside containers)
 nextcloud_data/
 db_data/
 
+# Environment files (local secrets and configs)
 .env
+
+# macOS system files
+.DS_Store
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup and log files
+prometheus_backup/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Docker-specific backup files
+*.bak
+docker-compose.override.yml
+
