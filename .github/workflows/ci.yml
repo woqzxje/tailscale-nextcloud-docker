@@ -3,8 +3,10 @@ name: Nextcloud Docker CI
 on:
   push:
     branches:
-      - main  # change if your main branch has another name
+      - master  # change if your main branch has another name
   pull_request:
+    branches:
+      - master		
 
 jobs:
   build_and_test:
