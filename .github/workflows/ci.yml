@@ -3,7 +3,7 @@ name: Nextcloud Docker CI
 on:
   push:
     branches:
-      - master  # or main, depending on your branch
+      - master
   pull_request:
     branches:
       - master
@@ -22,17 +22,64 @@ jobs:
       - name: Install Docker Compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-compose
+          sudo apt-get install -y docker-compose curl
 
+      # 🔐 Login to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 🛠 Build images
       - name: Build containers
         run: docker-compose -f docker-compose.yml build
 
+      # 🚀 Start stack
       - name: Start stack
         run: docker-compose -f docker-compose.yml up -d
 
-      - name: Check running containers
-        run: docker-compose ps
+      # ✅ Verify containers are running
+      - name: Verify all containers are running
+        run: |
+          echo "Checking all containers are UP..."
+          RUNNING=$(docker ps --format '{{.Names}} {{.Ports}} {{.Status}}')
+          echo "$RUNNING"
+          for svc in tailscale-nextcloud-docker-app-1 tailscale-nextcloud-docker-redis-1 tailscale-nextcloud-docker-caddy-1 tailscale-nextcloud-docker-db-1; do
+            echo "$RUNNING" | grep $svc | grep Up || (echo "❌ $svc is not running" && exit 1)
+          done
 
+      # 🌐 Dynamic port HTTP health check for Nextcloud
+      - name: Health check Nextcloud
+        run: |
+          PORT=$(docker ps --filter "name=tailscale-nextcloud-docker-app-1" --format '{{.Ports}}' | grep -oE '[0-9]+->80/tcp' | cut -d'-' -f1)
+          if [ -z "$PORT" ]; then
+            echo "❌ Could not detect mapped host port for Nextcloud app"
+            exit 1
+          fi
+          echo "ℹ️ Detected Nextcloud on host port $PORT"
+          for i in {1..12}; do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:$PORT || true)
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "✅ Nextcloud is responding on port $PORT"
+              exit 0
+            fi
+            echo "Waiting for Nextcloud to respond (attempt $i)..."
+            sleep 5
+          done
+          echo "❌ Nextcloud did not respond in time"
+          docker-compose logs
+          exit 1
+
+      # 📤 Push image(s) to Docker Hub
+      - name: Push app image to Docker Hub
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/tailscale-nextcloud:latest
+          echo "Tagging and pushing $IMAGE_NAME"
+          docker tag tailscale-nextcloud-docker-app:latest $IMAGE_NAME
+          docker push $IMAGE_NAME
+
+      # 🧹 Tear down
       - name: Tear down stack
         run: docker-compose -f docker-compose.yml down
 
