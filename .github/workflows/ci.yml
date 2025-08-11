@@ -8,7 +8,7 @@ on:
     branches:
       - master
 
-# 🔒 Limit token permissions
+# Restrict permissions for security
 permissions:
   contents: read
 
@@ -17,36 +17,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 📥 Checkout repository
+      # Checkout your repo code
       - name: Check out repository
         uses: actions/checkout@v3
 
-      # 📦 Install Docker Compose + curl
+      # Install Docker Compose and curl
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose curl
 
-      # 🔐 Log in to Docker Hub using secrets
+      # Login to Docker Hub with secrets
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 🛠 Build containers from docker-compose.yml
+      # Build containers (in your case pulls official images)
       - name: Build containers
         run: docker-compose -f docker-compose.yml build
 
-      # 🚀 Start stack
+      # Start all services
       - name: Start stack
         run: docker-compose -f docker-compose.yml up -d
 
-      # ✅ Check running containers
+      # Check running containers
       - name: Check running containers
         run: docker-compose ps
 
-      # 🌐 Improved & verbose health check
+      # Health check with verbose curl and extended retries
       - name: Health check Nextcloud
         run: |
           PORT=$(docker ps --filter "name=app" --format '{{.Ports}}' | grep -oE '[0-9]+->80/tcp' | cut -d'-' -f1)
@@ -71,15 +71,16 @@ jobs:
           docker-compose logs --no-color
           exit 1
 
-      # 📤 Push Nextcloud image to Docker Hub
+      # Tag and push official nextcloud image to your Docker Hub namespace
       - name: Push Nextcloud image to Docker Hub
         run: |
           IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/nextcloud:latest
-          echo "Pushing Docker image $IMAGE_NAME"
+          echo "Tagging image 'nextcloud' as $IMAGE_NAME"
           docker tag nextcloud $IMAGE_NAME
+          echo "Pushing image $IMAGE_NAME to Docker Hub"
           docker push $IMAGE_NAME
 
-      # 🛡 Scan for vulnerabilities using Trivy
+      # Scan Docker image for high/critical vulnerabilities with Trivy
       - name: Scan Docker image for vulnerabilities
         uses: aquasecurity/trivy-action@master
         with:
@@ -88,7 +89,7 @@ jobs:
           ignore-unfixed: true
           format: table
 
-      # 🧹 Tear down stack
+      # Tear down all running containers and networks
       - name: Tear down stack
         run: docker-compose -f docker-compose.yml down
 
