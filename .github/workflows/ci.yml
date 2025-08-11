@@ -1,4 +1,4 @@
-kname: Nextcloud Docker CI
+name: Nextcloud Docker CI
 
 on:
   push:
