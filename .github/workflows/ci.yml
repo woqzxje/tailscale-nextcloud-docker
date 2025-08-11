@@ -49,18 +49,18 @@ jobs:
     name: Scan Docker Images for CVEs
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        image: [mariadb:lts, redis:alpine, nextcloud, caddy:latest]
+
     steps:
-      - name: Scan Docker images with Trivy
+      - name: Scan ${{ matrix.image }} with Trivy
         uses: aquasecurity/trivy-action@0.11.2
         with:
           scan-type: image
+          image-ref: ${{ matrix.image }}
           ignore-unfixed: true
           severity: CRITICAL,HIGH
-          image-ref: |
-            mariadb:lts
-            redis:alpine
-            nextcloud
-            caddy:latest
 
   secret_scan:
     name: Scan Repository for Secrets
