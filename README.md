@@ -1,6 +1,6 @@
 # 🗂️ Self-Hosted Nextcloud with Docker, Caddy, Prometheus, Grafana & Tailscale
 
-This project lets me run a fully self-hosted, private cloud storage and monitoring stack on macOS using **Docker Compose**, with secure remote access through **Tailscale’s MagicDNS**, **HTTPS** via **Caddy**, and real-time monitoring using **Prometheus + Grafana**. It’s secure, private, and entirely within my control.
+This project lets me run a fully self-hosted, private cloud storage and monitoring stack on macOS using **Colima**, **Docker Compose**, with secure remote access through **Tailscale’s MagicDNS**, **HTTPS** via **Caddy**, and real-time monitoring using **Prometheus + Grafana**. It’s secure, private, and entirely within my control.
 
 ---
 
