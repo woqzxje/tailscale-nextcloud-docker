@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Scan Docker images with Trivy
-        uses: aquasecurity/trivy-action@v0.11.2
+        uses: aquasecurity/trivy-action@v0.11.3
         with:
           scan-type: image
           ignore-unfixed: true
@@ -72,6 +72,4 @@ jobs:
 
       - name: Run Gitleaks to detect secrets
         uses: gitleaks/gitleaks-action@v2
-        with:
-          config-path: ""
 
