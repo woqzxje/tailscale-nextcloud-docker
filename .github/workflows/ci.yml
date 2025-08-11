@@ -10,6 +10,7 @@ on:
 
 jobs:
   test_stack:
+    name: Test Docker Compose Stack
     runs-on: ubuntu-latest
 
     steps:
@@ -21,20 +22,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Start stack
+      - name: Start Docker Compose stack
         run: docker-compose up -d
 
       - name: Wait for Nextcloud to be ready
         run: |
           for i in {1..30}; do
             if curl -sSf http://localhost:12000 > /dev/null; then
-              echo "Nextcloud is up!"
+              echo "✅ Nextcloud is up!"
               exit 0
             fi
             echo "Waiting for Nextcloud..."
             sleep 5
           done
-          echo "Nextcloud did not become ready in time."
+          echo "❌ Nextcloud did not become ready in time."
           docker-compose logs
           exit 1
 
@@ -49,8 +50,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Trivy
-        uses: aquasecurity/trivy-action@v0.16.1
+      - name: Scan Docker images with Trivy
+        uses: aquasecurity/trivy-action@v0.11.2
         with:
           scan-type: image
           ignore-unfixed: true
