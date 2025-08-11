@@ -3,36 +3,74 @@ name: Nextcloud Docker CI
 on:
   push:
     branches:
-      - master  # or main, depending on your branch
+      - master
   pull_request:
     branches:
       - master
 
 jobs:
-  build_and_test:
+  test_stack:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Build containers
-        run: docker-compose -f docker-compose.yml build
-
       - name: Start stack
-        run: docker-compose -f docker-compose.yml up -d
+        run: docker-compose up -d
+
+      - name: Wait for Nextcloud to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://localhost:12000 > /dev/null; then
+              echo "Nextcloud is up!"
+              exit 0
+            fi
+            echo "Waiting for Nextcloud..."
+            sleep 5
+          done
+          echo "Nextcloud did not become ready in time."
+          docker-compose logs
+          exit 1
 
       - name: Check running containers
         run: docker-compose ps
 
       - name: Tear down stack
-        run: docker-compose -f docker-compose.yml down
+        run: docker-compose down -v
+
+  image_scan:
+    name: Scan Docker Images for CVEs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Trivy
+        uses: aquasecurity/trivy-action@v0.16.1
+        with:
+          scan-type: image
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+          image-ref: |
+            mariadb:lts
+            redis:alpine
+            nextcloud
+            caddy:latest
+
+  secret_scan:
+    name: Scan Repository for Secrets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Run Gitleaks to detect secrets
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: ""
 
